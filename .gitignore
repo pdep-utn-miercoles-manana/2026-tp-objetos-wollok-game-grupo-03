@@ -1,0 +1,4 @@
+# Wollok logs & temporals
+log/
+*.log
+node_modules/

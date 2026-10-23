@@ -1,0 +1,40 @@
+import src.pisos.*
+import src.ascensor.*
+import src.items.*
+import src.protagonista.*
+
+describe "Tests de Ascensor Dimensional - Grupo 03" {
+
+  test "El protagonista empieza con manos vacías y sin acompañante" {
+    assert.equals(manosVacias, protagonista.inventario())
+    assert.equals(sinAcompaniante, protagonista.acompaniante())
+  }
+
+  test "El protagonista puede agarrar un objeto y tenerlo en su inventario" {
+    protagonista.inventario(paraguasAntiguo) 
+    assert.equals(paraguasAntiguo, protagonista.inventario())
+  }
+
+  test "Al soltar el ítem, vuelve a tener manos vacías" {
+    protagonista.inventario(viniloDeCharly)
+    protagonista.soltarItem()
+    assert.equals(manosVacias, protagonista.inventario())
+  }
+
+  test "viajar al piso 5" {
+    ascensor.pisoActual(5)
+    assert.equals(5, ascensor.pisoActual())
+  }
+}
+
+describe "Tests del Ascensor" {
+  test "El ascensor arranca en el piso 6 (Oficina)" {
+    assert.equals(piso6_Oficina, ascensor.pisoActual())
+    assert.equals(6, ascensor.pisoActual().numero())
+  }
+  test "El ascensor puede viajar a otro piso" {
+    ascensor.pisoActual(piso1_Biblioteca)
+    assert.equals(piso1_Biblioteca, ascensor.pisoActual())
+    assert.equals(1, ascensor.pisoActual().numero())
+  }
+}

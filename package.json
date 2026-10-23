@@ -1,0 +1,13 @@
+{
+  "name": "ascensor-dimensional-grupo-03",
+  "version": "1.0.0",
+  "description": "TP Integrador Objetos - Wollok Game - Grupo 03: Ascensor Dimensional",
+  "resourceFolder": "assets",
+  "sourceFolder": "src",
+  "testFolder": "test",
+  "wollokVersion": "4.0.0",
+  "scripts": {
+    "start": "wollok run main.main",
+    "test": "wollok test"
+  }
+}
