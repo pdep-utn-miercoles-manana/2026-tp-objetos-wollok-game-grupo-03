@@ -1,29 +1,10 @@
 // Objetos del inventario (manosVacias, paraguasAntiguo, viniloDeCharly, carneDeLosBeatles, llaveMaestra) y acompañantes (sinAcompaniante, acompanianteTRex)
-
-object manosVacias {
-  method nombre() = "Manos vacías"
+class Item {
+  const property nombre
 }
 
-object viniloDeCharly {
-  method nombre() = "Vinilo De Charly"
-} 
+const libroAntiguo = new Item(nombre = "El Libro antiguo")
+const bajoDePedroAznar = new Item(nombre = "El bajode Pedro Aznar")
+const carneDeLosBeatles = new Item(nombre = " El churrasco de los Beatles")
+const llaveMaestra = new Item(nombre = "La Llave Maestra")
 
-object paraguasAntiguo {
-  method  nombre() = "Paraguas Antiguo"
-}
-
-object carneDeLosBeattles {
-  method nombre() = "Carne De Los Beattles"
-} 
-
-object llaveMaestra {
-  method nombre() = "Llave Maestra"
-} 
-
-object tRex {
-  method nombre() = "tRex"
-} 
-
-object sinAcompaniante {
-  method nombre() = "Sin Acompañante"
-} 
