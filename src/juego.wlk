@@ -13,7 +13,8 @@ object juego {
     // Controles de acción
     keyboard.h().onPressDo({ protagonista.interactuar() })
     keyboard.i().onPressDo({ protagonista.teclaInspeccionar() })
-    keyboard.e().onPressDo({ protagonista.usarItem()})
+    keyboard.e().onPressDo({ protagonista.usarEspacio(0)})
+    keyboard.r().onPressDo({ protagonista.usarEspacio(1)})
     keyboard.a().onPressDo({ protagonista.teclaMandarAcompaniante()})
     keyboard.b().onPressDo({ protagonista.teclaBotonera()})
 

@@ -6,7 +6,7 @@ import personajes.*
 class Piso {
   var property numero 
   const descripcion
-  var property personaje = sinPersonaje
+  var property personaje
 
   method inspeccionar() = descripcion
 
@@ -19,7 +19,7 @@ class Piso {
   }
 
   method usarItem(item, unProtagonista) {
-    unProtagonista.decir("No sirve de nada usar " + item.nombre() + " en este piso.")
+    personaje.recibir(item, unProtagonista)
   }
 
   method recibirAcompaniante(acompaniante, unProtagonista) {
@@ -37,14 +37,15 @@ object piso0_PlantaBaja inherits Piso(
   descripcion = "La puerta de salida está cerrada con cadenas y candado, además hay un tipo encapuchado con muy mal olor.",
   personaje = enteOscuro
 ) {
-  override method usarItem(item, unProtagonista) {
+  //no deberia hacer falta si delegamos todo a los personajes
+  /* override method usarItem(item, unProtagonista) {
     if (item == llaveMaestra) {
-      unProtagonista.soltarItem(llaveMaestra)
+      unProtagonista.quitarItem(llaveMaestra)
       unProtagonista.decir("Ente Oscuro: 'Has cumplido...' ¡El ente abre el candado, te deja salir y ganaste el juego!")
     } else {
       super(item, unProtagonista)
     }
-  }
+  } */
 } 
   //Interacción con un personaje que le indique que debe encontrar la llave mágica escondida en el edificio
   //para poder salir
@@ -70,11 +71,12 @@ object piso3_CarniceriaBeatles inherits Piso(
   descripcion = "Carnicería de Los Beatles: Asado al ritmo de Abbey Road.",
   personaje = beatles
 ) {
-  override method recibirReliquiaRock(unProtagonista) {
-    unProtagonista.soltarItem(bajo)
-    unProtagonista.agarrarItem(carneDeLosBeattles)
+  //tampoco deberia hacer falta
+  /* method recibirReliquiaRock(unProtagonista) {
+    unProtagonista.quitarItem(bajoDePedroAznar)
+    unProtagonista.tomarItem(carneDeLosBeattles)
     unProtagonista.decir("Paul McCartney: ¡Qué joya! Tomá nuestro mejor corte de carne a cambio.")
-  }
+  } */
 }
 
   //Los Beatles tienen una carnicería. A Paul Mccartney le falta el bajo. 
@@ -86,11 +88,12 @@ object piso4_JunglaPrehistorica inherits Piso(
   personaje = tRex
 ) 
 {
-  override method recibirCarne(unProtagonista) {
-    unProtagonista.soltarItem(carneDeLosBeattles)
+  //tampoco hace falta
+  /* method recibirCarne(unProtagonista) {
+    unProtagonista.quitarItem(carneDeLosBeattles)
     tRex.comerCarne()
     unProtagonista.decir("¡El T-Rex se comió el churrasco y ahora me pide mimos. Un tierno... capaz me quiere acompañar")
-  }
+  } */
 }
   //Hay un tiranosaurio Rex. Para que no ataque hay que alimentarlo (pedazo de carne).
   //Al completarlo, el Trex es acompañante del protagonista
@@ -100,9 +103,11 @@ object piso5_BaseMilitar inherits Piso(
   descripcion = "Es una base militar custodiada por milicos, parece el area 51...",
   personaje = sinPersonaje
 ) {
+
   var property estaDespejada = false
 
-  override method ataqueDeTRex(unProtagonista) {
+  //ataqueTrex -> recibirAcompaniante para hacer polimorfismo, consulta
+  override method recibirAcompaniante(acompaniante, unProtagonista) {
     if (not estaDespejada) {
       estaDespejada = true
       unProtagonista.decir("¡El T-Rex corrió a todos los militares y dejó la base libre! Ahora puedo usar el mapa para buscar la llave.")
@@ -110,15 +115,14 @@ object piso5_BaseMilitar inherits Piso(
       unProtagonista.decir("La base ya está completamente despejada.")
     }
   }
-
-  override method recibirMapa(unProtagonista) {
-    if (estaDespejada) {
-      unProtagonista.soltarItem(libroAntiguo)
-      unProtagonista.agarrarItem(llaveMaestra)
-      unProtagonista.decir("¡Guiándote con el mapa encontraste el lugar exacto y desenterraste la Llave Maestra!")
-    } else {
-      unProtagonista.decir("¡Imposible ponerse a buscar con el mapa mientras los militares vigilan! Me van a dejar con más agujeros que un queso!.")
-    }
+  //habria que usar usarItem(LibroAntiguo), consulta
+  override method usarItem(item, unProtagonista) {
+    if (item == libroAntiguo) {
+      if(estaDespejada) {
+        unProtagonista.reemplazarItem(item, llaveMaestra)
+        unProtagonista.decir("¡Guiándote con el mapa encontraste el lugar exacto y desenterraste la Llave Maestra!")
+      } else unProtagonista.decir("¡Imposible ponerse a buscar con el mapa mientras los militares vigilan! Me van a dejar con más agujeros que un queso!.")
+    } else super(item, unProtagonista) 
   }
 }
 
@@ -128,7 +132,7 @@ object piso5_BaseMilitar inherits Piso(
 
 object piso6_Oficina inherits Piso(
   numero = 6,
-  descripcion = "Terminó la jornada laboral, quiero irme a casa."
+  descripcion = "Terminó la jornada laboral, quiero irme a casa.",
+  personaje = sinPersonaje
 ) {}
-
   //En este piso arranca el juego. El personaje se quiere ir a su casa y se sube al ascensor

@@ -16,8 +16,7 @@
 //     method recibirItem()
 // }
 
-
-
+import wollok.game.*
 
 object charlyGarcia{
     method nombre() = "Charly Garcia"
@@ -40,12 +39,9 @@ object charlyGarcia{
         }else{
             game.say(self, "...")
         }
-        
     }
 
-    method recibir(item){
-
-    }
+    method recibir(item, protagonista){}
 }
 
 object beatles{
@@ -69,21 +65,17 @@ object beatles{
         }else{
             game.say(self, "...")
         }
-        
     }
-
-    method recibir(item){
-        
-    }
-
+    method recibir(item, protagonista){}
 }
 
 object bibliotecario{
-    method nombre() = "Bibliotecario"
 
     var property posicion = game.at(1,1)
     var property imagen = "bibliotecario.png"
     var yaDioLibro = false
+
+    method nombre() = "Bibliotecario"
 
     method interactuar(){
         if(yaDioLibro){
@@ -103,14 +95,38 @@ object bibliotecario{
         
     }
 
-    method recibir(item){
-        
-    }
+    method recibir(item, protagonista){}
 }
 
+object enteOscuro {
+
+    var property posicion = game.at(1,1)
+    var property imagen = "enteOscuro.png"
+
+    method nombre() = "Ente oscuro"
+
+    method interactuar(){}
+
+    method responder(opcion){}
+
+    method recibir(item, protagonista){}
+}
+
+object sinPersonaje {
+    method nombre() = "nadie"
+    method interactuar() {}
+    method responder(opcion){}
+    method recibir(item, protagonista){
+        protagonista.decir("No sirve de nada usar " + item.nombre() + " en este piso.")
+    }
+}
 //Acompaniantes
 object tRex {
   method nombre() = "tRex"
+
+  method comerCarne() {}
+
+  method puedeAtacar() {}
 } 
 
 object sinAcompaniante {

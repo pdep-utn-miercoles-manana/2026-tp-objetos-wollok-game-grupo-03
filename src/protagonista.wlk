@@ -4,7 +4,7 @@ import ascensor.*
 // Objeto protagonista y modos de interacción (modoExploracion, modoDialogo, modoBotonera, etc.)
 object protagonista {
 
-    var property inventario = #{} // va a tener que tratarse de un SET ya que puede tener varios items
+    var property inventario = [manosVacias, manosVacias] // va a tener que tratarse de un SET ya que puede tener varios items
     var property acompaniante = sinAcompaniante
     //var property modo = modoBotonera 
 
@@ -13,13 +13,23 @@ object protagonista {
     }
 
     method tomarItem(item){
-        inventario.add(item)
+      if (!self.tiene(item) and self.tiene(manosVacias)) {
+        if (inventario.get(0) == manosVacias) {
+          inventario = [item, inventario.get(1)]
+        } else {
+          inventario = [inventario.get(0), item]
+        }
+      }
     }
 
     method quitarItem(item){
-        if(self.tiene(item)){
-            inventario.remove(item)
-        }
+      self.reemplazarItem(item, manosVacias)
+    }
+
+    method reemplazarItem(item1, item2){
+      if (self.tiene(item1)) {
+        inventario = inventario.map({ unItem => if (unItem == item1) item2 else unItem })
+      }
     }
 
     method nombresDeItems() {
@@ -33,6 +43,7 @@ object protagonista {
     }
   }
 
+// podemos delegar al personaje del piso averiguar si tiene el item que necesita
     method usarItem(unItem) {
     if (self.tiene(unItem)) {
       const alguien = ascensor.pisoActual().personaje()
@@ -43,15 +54,12 @@ object protagonista {
   }
 
   // Controles de acción del usuario
-  
-  
   method teclaInspeccionar() {}
 
   method teclaUsarItem() {}
 
   method teclaMandarAcompaniante() {}
 
-/*
   method teclaBotonera() {
      ascensor.abrirBotonera()
   }
@@ -64,7 +72,14 @@ object protagonista {
       ascensor.pisoActual().responder(numero)
     }
   }
-  */
+  
+  method usarEspacio(numero) {
+    const item = self.inventario().get(numero)
+    const piso = ascensor.pisoActual()
+    item.usarEn(piso, self)
+  }
+
+  method decir(mensaje) {}
 
 }
 
