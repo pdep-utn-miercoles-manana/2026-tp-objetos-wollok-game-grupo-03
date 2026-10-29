@@ -12,7 +12,7 @@
 //     method nombre() = nombre
 
 //     method interactuar ()
-//     method responder(opcion)
+//     method responder(opcion, protagonista)
 //     method recibirItem()
 // }
 
@@ -33,7 +33,7 @@ object charlyGarcia{
         }
     }
 
-    method responder(opcion){
+    method responder(opcion, protagonista){
         if(yaDioBajo){
             game.say(self, "...")
         }else{

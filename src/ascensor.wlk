@@ -1,5 +1,6 @@
 import pisos.*
 import protagonista.*
+import juego.*
 // Objeto ascensor y estados de navegación (navegacionPrologo, navegacionLibre)
 object ascensor {
   var property pisoActual = piso6_Oficina
@@ -18,12 +19,9 @@ object ascensor {
   method irAPiso(numeroPiso) {
     const destino = pisos.find({ p => p.numero() == numeroPiso })
     pisoActual = destino
-    // protagonista.decir("Llegué al piso " + numeroPiso + ". " + destino.inspeccionar())
+    visorDePantalla.mostrarPisoActual()
+    protagonista.decir("Llegué al piso " + numeroPiso + ". " + "a ver que onda...")
   }
-
-  method abrirBotonera() {}
-
-  method botoneraAbierta() = true
 }
 
 object navegacionPrologo {
@@ -32,9 +30,9 @@ object navegacionPrologo {
     if (numeroPiso == 0) {
       unAscensor.irAPiso(0)
       unAscensor.navegacion(navegacionLibre)
-      // protagonista.decir("¿QUE PASO ACÁ? ¿Y LA SALIDA? Capaz ese wacho encapuchado me dice que pasó.")
+      protagonista.decir("¿QUE PASO ACÁ? ¿Y LA SALIDA? Capaz ese wacho encapuchado me dice que pasó.")
     } else {
-      // protagonista.decir("Estoy muy cansado para ir a otros pisos, mejor voy a la planta Baja .")
+      protagonista.decir("Estoy muy cansado para ir a otros pisos, mejor voy a la planta Baja .")
     }
   }
 }

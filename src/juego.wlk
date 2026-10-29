@@ -1,5 +1,19 @@
 import wollok.game.*
 import protagonista.*
+import ascensor.*
+
+object visorDePantalla {
+  var property position = game.at(0, 0)
+  var property image = "portada.png" // Arranca con la imagen del edificio de Sancor Seguros
+
+  method mostrarIntro() {
+    image = "intro.png" // Segunda imagen con la descripción del juego
+  }
+
+  method mostrarPisoActual() {
+    image = ascensor.pisoActual().imagen() // Muestra el .png del piso donde esté el ascensor
+  }
+}
 
 object juego {
   method iniciar() {
@@ -8,17 +22,21 @@ object juego {
     game.height(10)
     game.cellSize(64)
     
-    // game.addVisual(protagonista) el personaje principal no tiene ni imagen ni posicion xq es en primera persona. 
+// Agregamos primero el visor de pantalla para que quede de fondo
+    game.addVisual(visorDePantalla)
 
-    // Controles de acción
-    keyboard.h().onPressDo({ protagonista.interactuar() })
-    keyboard.i().onPressDo({ protagonista.teclaInspeccionar() })
-    keyboard.e().onPressDo({ protagonista.usarEspacio(0)})
-    keyboard.r().onPressDo({ protagonista.usarEspacio(1)})
-    keyboard.a().onPressDo({ protagonista.teclaMandarAcompaniante()})
-    keyboard.b().onPressDo({ protagonista.teclaBotonera()})
 
-    // Teclas numéricas
+// Tecla ENTER para avanzar en las pantallas de inicio
+    keyboard.enter().onPressDo({ protagonista.teclaEnter() })
+
+// Controles de acción principal
+    keyboard.h().onPressDo({ protagonista.hablar() })
+    keyboard.i().onPressDo({ protagonista.inspeccionar() })
+    keyboard.e().onPressDo({ protagonista.teclaInventario() })
+    keyboard.a().onPressDo({ protagonista.mandarAcompaniante() })
+    keyboard.b().onPressDo({ protagonista.abrirBotonera() })
+
+// Teclas numéricas universales (delegan en el modo actual)
     keyboard.num0().onPressDo({ protagonista.teclaNumero(0) })
     keyboard.num1().onPressDo({ protagonista.teclaNumero(1) })
     keyboard.num2().onPressDo({ protagonista.teclaNumero(2) })
@@ -29,4 +47,35 @@ object juego {
     
     game.start()
   }
+}
+
+object cajaDeTexto {
+  var property position = game.at(1, 0)
+  var visible = false
+
+  method image() = "caja_dialogo.png"
+
+  method mostrarMensaje(unMensaje) {
+    textoDialogo.text(unMensaje)
+    if (not visible) {
+      game.addVisual(self)
+      game.addVisual(textoDialogo) // Se agrega después para dibujarse arriba de la caja
+      visible = true
+    }
+  }
+
+  method ocultar() {
+    if (visible) {
+      game.removeVisual(textoDialogo)
+      game.removeVisual(self)
+      visible = false
+    }
+  }
+}
+
+object textoDialogo {
+  // Posición centrada horizontalmente (7) y a mitad de altura de la caja (1)
+  var property position = game.at(7, 1)
+  var property text = ""
+  var property textColor = "FFFFFF"
 }

@@ -2,11 +2,13 @@ import protagonista.*
 import items.*
 import personajes.*
 
+
 // Clase Piso y objetos para cada uno de los pisos dimensionales
 class Piso {
   var property numero 
   const descripcion
-  var property personaje
+  const property personaje
+  const property imagen = "piso6_oficina.png" // Imagen por defecto
 
   method inspeccionar() = descripcion
 
@@ -35,7 +37,8 @@ class Piso {
 object piso0_PlantaBaja inherits Piso(
   numero = 0,
   descripcion = "La puerta de salida está cerrada con cadenas y candado, además hay un tipo encapuchado con muy mal olor.",
-  personaje = enteOscuro
+  personaje = enteOscuro,
+  imagen = "piso0_entrada.png"
 ) {
   //no deberia hacer falta si delegamos todo a los personajes
   /* override method usarItem(item, unProtagonista) {
@@ -53,7 +56,8 @@ object piso0_PlantaBaja inherits Piso(
 object piso1_Biblioteca inherits Piso(
   numero = 1,
   descripcion = "Hay libros antiguos y mucha arena en el horizonte.",
-  personaje = bibliotecario
+  personaje = bibliotecario,
+  imagen = "piso1_biblioteca.png"
 ) {}
   //Hay un bibliotecario, le presenta un libro al protagonista que tiene un mapa
   // que le dice donde esta la llave escondida en la base militar.
@@ -61,7 +65,8 @@ object piso1_Biblioteca inherits Piso(
 object piso2_RecitalCharly inherits Piso(
   numero = 2,
   descripcion = "Recital de Charly: Lluvia torrencial y teclados en peligro.",
-  personaje = charlyGarcia
+  personaje = charlyGarcia,
+  imagen = "piso2_seminare.png"
 ) {}
   //Charly García está en un recital, y se olvida la letra de Seminare, el jugador debe completarla.
   //Al finalizarla, Charly le da un Bajo al protagonista en agradencimiento
@@ -69,7 +74,8 @@ object piso2_RecitalCharly inherits Piso(
 object piso3_CarniceriaBeatles inherits Piso(
   numero = 3,
   descripcion = "Carnicería de Los Beatles: Asado al ritmo de Abbey Road.",
-  personaje = beatles
+  personaje = beatles,
+  imagen = "piso3_obladioblada.png"
 ) {
   //tampoco deberia hacer falta
   /* method recibirReliquiaRock(unProtagonista) {
@@ -85,7 +91,8 @@ object piso3_CarniceriaBeatles inherits Piso(
 object piso4_JunglaPrehistorica inherits Piso(
   numero = 4,
   descripcion = "Esta jungla esta llena de arboles gigantes... y hay un re bicho que gruñe y me mira entre los arboles.",
-  personaje = tRex
+  personaje = tRex,
+  imagen = "piso4_rawr.png"
 ) 
 {
   //tampoco hace falta
@@ -101,7 +108,8 @@ object piso4_JunglaPrehistorica inherits Piso(
 object piso5_BaseMilitar inherits Piso(
   numero = 5,
   descripcion = "Es una base militar custodiada por milicos, parece el area 51...",
-  personaje = sinPersonaje
+  personaje = sinPersonaje,
+  imagen = "piso5_shadowMoses.png"
 ) {
 
   var property estaDespejada = false
@@ -133,6 +141,7 @@ object piso5_BaseMilitar inherits Piso(
 object piso6_Oficina inherits Piso(
   numero = 6,
   descripcion = "Terminó la jornada laboral, quiero irme a casa.",
-  personaje = sinPersonaje
+  personaje = sinPersonaje,
+  imagen = "piso6_oficina.png"
 ) {}
   //En este piso arranca el juego. El personaje se quiere ir a su casa y se sube al ascensor
