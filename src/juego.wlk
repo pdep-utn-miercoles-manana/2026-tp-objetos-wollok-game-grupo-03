@@ -13,6 +13,10 @@ object visorDePantalla {
   method mostrarPisoActual() {
     image = ascensor.pisoActual().imagen() // Muestra el .png del piso donde esté el ascensor
   }
+
+  method mostrarBotonera() {
+    image = "botonera.png"
+  }
 }
 
 object juego {

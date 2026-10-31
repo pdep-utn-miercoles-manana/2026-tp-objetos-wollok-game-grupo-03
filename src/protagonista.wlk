@@ -8,71 +8,65 @@ import juego.*
 // MODOS del protagonista - POLIMORFICOS
 
 object modoExploracion {
-    method iniciarDialogo(protagonista) {
-      protagonista.modo(modoDialogo)
-      protagonista.decir("Que vas a decir? : [1] ¿Puedo ayudarte con algo? | [2] ¿Me acompanias? | [3] Como puedo escapar de aca?")
-    }
+  method iniciarDialogo(protagonista) {
+    protagonista.modo(modoDialogo)
+    protagonista.decir("Que puedo decir? : [1] ¿Puedo ayudarte con algo? | [2] ¿Me acompañás a otro piso? | [3] ¿Como puedo escapar de acá?")
+  }
 
-    method inspeccionarPiso(protagonista) {
-      protagonista.decir(ascensor.pisoActual().inspeccionar())
-    }
+  method inspeccionarPiso(protagonista) {
+    protagonista.decir(ascensor.pisoActual().inspeccionar())
+  }
 
-   method abrirInventario(unProta) {
+  method abrirInventario(unProta) {
     unProta.modo(modoInventario)
     const item1 = unProta.inventario().get(0).nombre()
     const item2 = unProta.inventario().get(1).nombre()
     unProta.decir("Tengo las siguientes cosas para usar: [1] " + item1 + " | [2] " + item2)
   }
 
-    method mandarAcompaniante(unProta) {
-    ascensor.pisoActual().recibirAcompaniante(unProta.acompaniante(), unProta)
+  method mandarAcompaniante(unProta) {
+    ascensor.pisoActual().recibirAcompañante(unProta.acompañante(), unProta)
   }
 
   method abrirBotonera(unProta) {
     unProta.modo(modoBotonera)
-    unProta.decir("A ver a donde puedo ir... tengo los pisos del 0 al 6 para viajar.")
+    visorDePantalla.mostrarBotonera()
+    unProta.decir("A ver a donde puedo ir... tengo los pisos del 0 al 6 para viajar. (Usa la tecla B para ver la botonera del ascensor)")
   }
 
-  method presionarNumero(numeroBoton, unProta) {} // En exploración los números no hacen nada, solo en modo botonera, inventario o dialogo
+  method presionarNumero(numeroBoton, unProta) {} // En exploración los números no hacen nada, solo en modo botonera, inventario o dialogo.
 
-method presionarEnter(unProta) { // Limpia la caja de texto para que no moleste
-  cajaDeTexto.ocultar()
-}
+  method presionarEnter(unProta) {          // Limpia la caja de texto para que no moleste
+    cajaDeTexto.ocultar()
+  }
 }
 
 
 object modoInventario {
-  method iniciarDialogo(unProta) {} 
+  method iniciarDialogo(unProta) {}  // No hacen nada cuando se mira el inventario
   method inspeccionarPiso(unProta) {}
   method presionarEnter(unProta) {}
-  
-  method abrirInventario(unProta) {
-    unProta.modo(modoExploracion)
-    unProta.decir("Cerré el inventario.")
-  }
-  
   method mandarAcompaniante(unProta) {}
   method abrirBotonera(unProta) {}
-
+  
+  method abrirInventario(unProta) { // Apretando la tecla de lo que se quiere hacer (botonera,dialogo, etc), permite cerrar la opción y volver al modo exploracion
+    unProta.modo(modoExploracion)
+    unProta.decir("Cerré el inventario, mejor no uso nada acá.")
+  }
+  
   method presionarNumero(numeroElegido, unProta) {
+   unProta.modo(modoExploracion) // Salgo del inventario
     if (numeroElegido == 1 or numeroElegido == 2) {
-      unProta.modo(modoExploracion) // Salgo del inventario primero
       const itemElegido = unProta.inventario().get(numeroElegido - 1)
-      
-      if (itemElegido != manosVacias) {
-        itemElegido.usarEn(ascensor.pisoActual(), unProta) 
-      } else {
-        unProta.decir("No tengo nada para usar ahi, flashie")
-      }
+      itemElegido.usarEn(ascensor.pisoActual(), unProta) // Polimorfismo puro
     } else {
-      unProta.modo(modoExploracion)
-      unProta.decir("No tengo nada para usar ahi, flashie")
+      unProta.decir("No tengo nada para usar ahi, flashie.")
     }
   }
 }
 
 object modoDialogo {
-  method iniciarDialogo(unProta) {} // Ya estoy hablando, no puede hacer nada mas
+  method iniciarDialogo(unProta) {} // Ya está hablando el protagonista, no puede hacer nada mas
   method inspeccionarPiso(unProta) {}
   method abrirInventario(unProta) {}
   method mandarAcompaniante(unProta) {}
@@ -97,11 +91,13 @@ object modoBotonera {
   
   method abrirBotonera(unProta) { // Si toco la B ya estando en modo botonera, vuelvo al modo normal (exploracion) para hacer otra cosa
     unProta.modo(modoExploracion)
+    visorDePantalla.mostrarPisoActual()
     unProta.decir("Mejor miro que hay en este piso.")
   }
 
   method presionarNumero(numeroPisoElegido, unProta) {
     unProta.modo(modoExploracion) // Salgo de la botonera
+    visorDePantalla.mostrarPisoActual()
     ascensor.botonPresionado(numeroPisoElegido) // Viajo
   }
 }
@@ -125,10 +121,10 @@ object modoIntro {
   method presionarEnter(unProta) {
     visorDePantalla.mostrarPisoActual() // Pasa a mostrar el Piso 6 (Oficina)
     unProta.modo(modoExploracion)       // Habilita los controles del juego
-    unProta.decir("Qué largo día en la oficina... Mejor toco la B y bajo a Planta Baja para ir a casa.")
+    unProta.decir("Qué largo día en la oficina che... mejor ya bajo a Planta Baja para ir a casa. (Tecla B para ver la botonera del ascensor)")
   }
 
-  method iniciarDialogo(unProta) {}
+  method iniciarDialogo(unProta) {} // No hace nada, es solo la introduccion
   method inspeccionarPiso(unProta) {}
   method abrirInventario(unProta) {}
   method mandarAcompaniante(unProta) {}
@@ -138,33 +134,27 @@ object modoIntro {
 object protagonista {
 
     var property inventario = [manosVacias, manosVacias] // va a tener que tratarse de un SET ya que puede tener varios items -- Preferimos usar listas ya que podemos acceder por indice al momento de querer usar los items y asignarlos a las teclas
-    var property acompaniante = sinAcompaniante
+    var acompaniante = sinAcompaniante
     var property modo = modoPortada
-    var property position = game.at(7, 1) // Posición donde va a salir la caja de texto
 
 // Dialogo
 
 method decir(unTexto) {
-    console.println(unTexto) 
-    cajaDeTexto.mostrarMensaje(unTexto)
+    console.println(unTexto) // para debug asi sale por consola
+    cajaDeTexto.mostrarMensaje(unTexto) // sale en la caja de dialogo del juego
   }
 
 // Uso del inventario
 
-    method tiene(item){
-        return inventario.contains(item)
-    }
+    method tiene(item) = inventario.contains(item)
 
-    method tomarItem(item){
+    method tomarItem(item){       // Usado cuando le dan los items
       if (!self.tiene(item) and self.tiene(manosVacias)) {
-        if (inventario.get(0) == manosVacias) {
-          const indiceLibre = inventario.indexOf(manosVacias)
           inventario.remove(manosVacias)
           inventario.add(item)
-        } else {
+      } else if (!self.tiene(manosVacias)) {
           self.decir("No tengo más espacio en el inventario.")
         }
-      }
     }
 
     method quitarItem(item){
@@ -175,7 +165,7 @@ method decir(unTexto) {
     self.quitarItem(itemViejo)
     self.tomarItem(itemNuevo)
   }
-  // Se delegan todo tema de teclas a los metodos
+  // Se delegan todo tema de teclas al modo que tenga el protagonista
   method teclaEnter() { modo.presionarEnter(self) }
   method hablar() { modo.iniciarDialogo(self) }
   method inspeccionar() { modo.inspeccionarPiso(self) }

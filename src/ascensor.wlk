@@ -25,7 +25,6 @@ object ascensor {
 }
 
 object navegacionPrologo {
-  method nombre() = "Navegacion Prologo" 
   method viajarA(numeroPiso, unAscensor) {
     if (numeroPiso == 0) {
       unAscensor.irAPiso(0)
@@ -38,7 +37,6 @@ object navegacionPrologo {
 }
 
 object navegacionLibre {
-  method nombre() = "Navegacion Libre"
   method viajarA(numeroPiso, unAscensor) {
     unAscensor.irAPiso(numeroPiso)
   }
