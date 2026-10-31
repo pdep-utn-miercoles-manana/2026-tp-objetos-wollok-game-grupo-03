@@ -19,6 +19,16 @@ object visorDePantalla {
   }
 }
 
+class LineaDialogo {
+  const property hablante
+  const property texto
+}
+
+object retratoDialogo {
+  var property position = game.at(1, 0)
+  var property image = "cara_prota.png"
+}
+
 object juego {
   method iniciar() {
     game.title("Ascensor Dimensional")
@@ -56,14 +66,43 @@ object juego {
 object cajaDeTexto {
   var property position = game.at(1, 0)
   var visible = false
+  const colaDeLineas = [] // Para tener una lista de dialogos y poder ir pasandolos para simular un dialogo
+  const mostrarCaras = false // PONER EN TRUE CUANDO ESTEN LISTAS LAS CARAS!!
 
   method image() = "caja_dialogo.png"
 
   method mostrarMensaje(unMensaje) {
-    textoDialogo.text(unMensaje)
+    self.mostrarLinea(new LineaDialogo(hablante = protagonista, texto = unMensaje))
+  }
+
+  method iniciarConversacion(listaDeLineas, unProtagonista) {
+    colaDeLineas.clear()
+    colaDeLineas.addAll(listaDeLineas)
+    unProtagonista.modo(modoConversacion)
+    self.avanzarConversacion(unProtagonista)
+  }
+
+  method avanzarConversacion(unProtagonista) {
+    if (not colaDeLineas.isEmpty()) {
+      const siguienteLinea = colaDeLineas.first()
+      colaDeLineas.remove(siguienteLinea)
+      self.mostrarLinea(siguienteLinea)
+    } else {
+      self.ocultar()
+      unProtagonista.modo(modoExploracion)
+    }
+  }
+
+  method mostrarLinea(unaLinea) {
+    textoDialogo.text(unaLinea.texto())
+    retratoDialogo.image(unaLinea.hablante().retrato())
+
     if (not visible) {
       game.addVisual(self)
-      game.addVisual(textoDialogo) // Se agrega después para dibujarse arriba de la caja
+      if (mostrarCaras) {
+        game.addVisual(retratoDialogo)
+      }
+      game.addVisual(textoDialogo)
       visible = true
     }
   }
@@ -71,6 +110,9 @@ object cajaDeTexto {
   method ocultar() {
     if (visible) {
       game.removeVisual(textoDialogo)
+      if (mostrarCaras) {
+        game.removeVisual(retratoDialogo)
+      }
       game.removeVisual(self)
       visible = false
     }

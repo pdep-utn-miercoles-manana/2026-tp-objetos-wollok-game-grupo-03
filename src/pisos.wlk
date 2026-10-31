@@ -7,7 +7,7 @@ import personajes.*
 class Piso {
   var property numero 
   var property descripcion
-  const property personaje
+  var property personaje
   const property imagen = "piso6_oficina.png" // Imagen por defecto
 
   // Para describir el piso

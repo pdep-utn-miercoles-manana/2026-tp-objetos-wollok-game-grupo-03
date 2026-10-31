@@ -82,6 +82,21 @@ object modoDialogo {
   }
 }
 
+object modoConversacion {
+  // Cada vez que apretás ENTER, pasa a la siguiente frase de la charla
+  method presionarEnter(unProta) {
+    cajaDeTexto.avanzarConversacion(unProta)
+  }
+
+  // Bloquea las demás acciones hasta que termine el ida y vuelta
+  method iniciarDialogo(unProta) {}
+  method inspeccionarPiso(unProta) {}
+  method abrirInventario(unProta) {}
+  method mandarAcompaniante(unProta) {}
+  method abrirBotonera(unProta) {}
+  method presionarNumero(n, unProta) {}
+}
+
 object modoBotonera {
   method iniciarDialogo(unProta) {}  // Solo viaja a pisos, no puede interactuar con otra cosa que no sea la botonera
   method inspeccionarPiso(unProta) {}
@@ -131,17 +146,50 @@ object modoIntro {
   method abrirBotonera(unProta) {}
   method presionarNumero(n, unProta) {}
 }
+
+// Para la parte del recital de charly
+object modoMinijuego {
+  method iniciarDialogo(unProta) {}
+  method inspeccionarPiso(unProta) {}
+  method abrirInventario(unProta) {}
+  method mandarAcompaniante(unProta) {}
+  method abrirBotonera(unProta) {}
+  method presionarEnter(unProta) {}
+
+  method presionarNumero(numeroElegido, unProta) {
+    if (numeroElegido >= 1 and numeroElegido <= 3) {
+      unProta.modo(modoExploracion)
+      ascensor.pisoActual().responderMinijuego(numeroElegido, unProta)
+    }
+  }
+}
+
+object modoFinDelJuego {
+  method iniciarDialogo(unProta) {}
+  method inspeccionarPiso(unProta) {}
+  method abrirInventario(unProta) {}
+  method mandarAcompaniante(unProta) {}
+  method abrirBotonera(unProta) {}
+  method presionarEnter(unProta) {}
+  method presionarNumero(numeroElegido, unProta) {}
+}
 object protagonista {
 
     var property inventario = [manosVacias, manosVacias] // va a tener que tratarse de un SET ya que puede tener varios items -- Preferimos usar listas ya que podemos acceder por indice al momento de querer usar los items y asignarlos a las teclas
     var acompaniante = sinAcompaniante
     var property modo = modoPortada
 
+    method retrato() = "cara_prota.png"
+
 // Dialogo
 
 method decir(unTexto) {
     console.println(unTexto) // para debug asi sale por consola
     cajaDeTexto.mostrarMensaje(unTexto) // sale en la caja de dialogo del juego
+  }
+
+method conversar(listaDeLineas) {
+    cajaDeTexto.iniciarConversacion(listaDeLineas, self)
   }
 
 // Uso del inventario
