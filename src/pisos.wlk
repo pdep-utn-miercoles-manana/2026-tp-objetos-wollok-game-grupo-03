@@ -1,6 +1,7 @@
 import protagonista.*
 import items.*
 import personajes.*
+import juego.*
 
 
 // Clase Piso y objetos para cada uno de los pisos dimensionales
@@ -8,7 +9,7 @@ class Piso {
   var property numero 
   var property descripcion
   var property personaje
-  const property imagen = "piso6_oficina.png" // Imagen por defecto
+  var property imagen = "piso6_oficina.png" // Imagen por defecto
 
   // Para describir el piso
   method inspeccionar() = descripcion
@@ -28,7 +29,7 @@ class Piso {
   }
 
   // Intermediario para el acompañante
-  method recibirAcompañante(acompañante, unProtagonista) {
+  method recibirAcompaniante(acompañante, unProtagonista) {
     if (acompañante.puedeAtacar()) {
       unProtagonista.decir("El T-Rex ruge al pedo, no hay nadie a quien asustar.")
     } else {
@@ -47,7 +48,7 @@ object piso0_PlantaBaja inherits Piso(
 
 object piso1_Biblioteca inherits Piso(
   numero = 1,
-  descripcion = "Es una biblioteca llena de libros antiguos y con mucha arena en el horizonte.",
+  descripcion = "Es una biblioteca llena de libros y papiros antiguos. Hay un egipcio muy fachero ordenando libros varios, capaz sepa como salir de acá.",
   personaje = bibliotecario,
   imagen = "piso1_biblioteca.png"
 ) {}
@@ -68,7 +69,13 @@ object piso3_CarniceriaBeatles inherits Piso(
   descripcion = "Parece que a los beatles no les funcionó el curro de la música y se pusieron una carnicería... tremendo.",
   personaje = beatles,
   imagen = "piso3_obladioblada.png"
-) {}
+) {
+  // Agregamos este método para que los Beatles le avisen al piso
+  method actualizarImagenConBajo() {
+    imagen = "piso3_beatlesConBajo.png"
+    visorDePantalla.mostrarPisoActual() // Refresca la pantalla al instante
+  }
+}
 
   //Los Beatles tienen una carnicería. A Paul Mccartney le falta el bajo. 
   // Al completar el nivel, le dan al personaje un pedazo de carne.
@@ -80,9 +87,17 @@ object piso4_JunglaPrehistorica inherits Piso(
   imagen = "piso4_rawr.png"
 ) 
 {
+  method tRexAlimentado() {
+    descripcion = "El T-Rex se comió el churrasco y ahora tiene cara de bueno. Parece un perrito gigante."
+    imagen = "piso4_feliz.png" // 2. Estado intermedio: T-Rex amigable
+    visorDePantalla.mostrarPisoActual() 
+  }
+
   method seFueElTRex() {
     personaje = sinPersonaje
     descripcion = "La jungla prehistórica tiene un depredador menos, el T-Rex se viene conmigo a casa."
+    imagen = "piso4_sinTRex.png" // 3. Estado final: Jungla vacía
+    visorDePantalla.mostrarPisoActual() 
   }
 }
   //Hay un tiranosaurio Rex. Para que no ataque hay que alimentarlo (pedazo de carne).
@@ -98,17 +113,19 @@ object piso5_BaseMilitar inherits Piso(
   var property estaDespejada = false
 
   //ataqueTrex -> recibirAcompaniante para hacer polimorfismo, consulta
-  override method recibirAcompañante(acompañante, unProtagonista) {
-    if (acompañante.puedeAtacar()) {
+  override method recibirAcompaniante(acompaniante, unProtagonista) {
+    if (acompaniante.puedeAtacar()) {
       if (not estaDespejada) {
         estaDespejada = true
         descripcion = "La base militar quedó completamente desierta tras el ataque del T-Rex. Ahora sería un buen momento para ver que onda este lugar sin que me disparen."
+        imagen = "piso5_atacado.png" // <-- CAMBIA LA IMAGEN AL DESTRUIR
+        visorDePantalla.mostrarPisoActual()
         unProtagonista.decir("¡El T-Rex corrió a todos los militares y dejó la base libre! Ahora puedo usar el mapa para buscar la llave.")
       } else {
         unProtagonista.decir("La base ya está completamente despejada, el T-Rex se los boleteó a todos")
       }
     } else {
-        super(acompañante, unProtagonista)
+        super(acompaniante, unProtagonista)
     }
   }
   //habria que usar usarItem(LibroAntiguo), consulta

@@ -64,15 +64,14 @@ object juego {
 }
 
 object cajaDeTexto {
-  var property position = game.at(1, 0)
+  var property position = game.at(0, 0)
   var visible = false
   const colaDeLineas = [] // Para tener una lista de dialogos y poder ir pasandolos para simular un dialogo
-  const mostrarCaras = false // PONER EN TRUE CUANDO ESTEN LISTAS LAS CARAS!!
 
   method image() = "caja_dialogo.png"
 
-  method mostrarMensaje(unMensaje) {
-    self.mostrarLinea(new LineaDialogo(hablante = protagonista, texto = unMensaje))
+  method mostrarMensaje(unHablante,unMensaje) {
+    self.mostrarLinea(new LineaDialogo(hablante = unHablante, texto = unMensaje))
   }
 
   method iniciarConversacion(listaDeLineas, unProtagonista) {
@@ -99,29 +98,44 @@ object cajaDeTexto {
 
     if (not visible) {
       game.addVisual(self)
-      if (mostrarCaras) {
-        game.addVisual(retratoDialogo)
-      }
+      game.addVisual(retratoDialogo)
       game.addVisual(textoDialogo)
       visible = true
+    } else {
+      // refresco por si no aparace la cara
+      game.removeVisual(retratoDialogo)
+      game.addVisual(retratoDialogo)
     }
   }
 
   method ocultar() {
     if (visible) {
       game.removeVisual(textoDialogo)
-      if (mostrarCaras) {
-        game.removeVisual(retratoDialogo)
-      }
+      game.removeVisual(retratoDialogo) // <-- SACAMOS EL RETRATO DE LA PANTALLA
       game.removeVisual(self)
       visible = false
+    }
+  }
+
+  // Carga líneas secuenciales sin alterar el modo actual (ideal para el minijuego)
+  method mostrarLineasMinijuego(listaDeLineas) {
+    colaDeLineas.clear()
+    colaDeLineas.addAll(listaDeLineas)
+    self.avanzarLineaMinijuego()
+  }
+
+  method avanzarLineaMinijuego() {
+    if (not colaDeLineas.isEmpty()) {
+      const siguienteLinea = colaDeLineas.first()
+      colaDeLineas.remove(siguienteLinea)
+      self.mostrarLinea(siguienteLinea)
     }
   }
 }
 
 object textoDialogo {
-  // Posición centrada horizontalmente (7) y a mitad de altura de la caja (1)
   var property position = game.at(7, 1)
   var property text = ""
   var property textColor = "FFFFFF"
 }
+

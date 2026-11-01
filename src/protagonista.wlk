@@ -25,13 +25,13 @@ object modoExploracion {
   }
 
   method mandarAcompaniante(unProta) {
-    ascensor.pisoActual().recibirAcompañante(unProta.acompañante(), unProta)
+    ascensor.pisoActual().recibirAcompaniante(unProta.acompaniante(), unProta)
   }
 
   method abrirBotonera(unProta) {
     unProta.modo(modoBotonera)
     visorDePantalla.mostrarBotonera()
-    unProta.decir("A ver a donde puedo ir... tengo los pisos del 0 al 6 para viajar. (Usa la tecla B para ver la botonera del ascensor)")
+    unProta.decir("A ver a donde puedo ir... tengo los pisos del 0 al 6 para viajar. (Usa la tecla B para volver al piso)")
   }
 
   method presionarNumero(numeroBoton, unProta) {} // En exploración los números no hacen nada, solo en modo botonera, inventario o dialogo.
@@ -154,13 +154,16 @@ object modoMinijuego {
   method abrirInventario(unProta) {}
   method mandarAcompaniante(unProta) {}
   method abrirBotonera(unProta) {}
-  method presionarEnter(unProta) {}
 
   method presionarNumero(numeroElegido, unProta) {
     if (numeroElegido >= 1 and numeroElegido <= 3) {
       unProta.modo(modoExploracion)
       ascensor.pisoActual().responderMinijuego(numeroElegido, unProta)
     }
+  }
+
+  method presionarEnter(unProta) {
+    cajaDeTexto.avanzarLineaMinijuego()
   }
 }
 
@@ -176,16 +179,20 @@ object modoFinDelJuego {
 object protagonista {
 
     var property inventario = [manosVacias, manosVacias] // va a tener que tratarse de un SET ya que puede tener varios items -- Preferimos usar listas ya que podemos acceder por indice al momento de querer usar los items y asignarlos a las teclas
-    var acompaniante = sinAcompaniante
+    var property acompaniante = sinAcompaniante
     var property modo = modoPortada
 
     method retrato() = "cara_prota.png"
 
-// Dialogo
+// Dialogo, uno para otros personajes y uno para el prota
+
+method decir(unHablante, unTexto) {
+    console.println(unTexto) // para debug asi sale por consola
+    cajaDeTexto.mostrarMensaje(unHablante, unTexto) // sale en la caja de dialogo del juego
+  }
 
 method decir(unTexto) {
-    console.println(unTexto) // para debug asi sale por consola
-    cajaDeTexto.mostrarMensaje(unTexto) // sale en la caja de dialogo del juego
+    self.decir(self, unTexto)
   }
 
 method conversar(listaDeLineas) {
@@ -205,9 +212,12 @@ method conversar(listaDeLineas) {
         }
     }
 
-    method quitarItem(item){
-      self.reemplazarItem(item, manosVacias)
+   method quitarItem(itemAQuitar) {
+    if (self.tiene(itemAQuitar)) {
+      inventario.remove(itemAQuitar)
+      inventario.add(manosVacias) 
     }
+  }
 
     method reemplazarItem(itemViejo, itemNuevo) {
     self.quitarItem(itemViejo)
