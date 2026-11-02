@@ -17,6 +17,10 @@ object visorDePantalla {
   method mostrarBotonera() {
     image = "botonera.png"
   }
+
+  method mostrarFinal() {
+    image = "final.png"
+  }
 }
 
 class LineaDialogo {

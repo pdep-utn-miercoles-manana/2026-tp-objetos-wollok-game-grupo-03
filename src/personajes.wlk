@@ -12,19 +12,19 @@ class Personaje {
 
      // Comportamientos por defecto (cada personaje sobreescribe lo que necesita)
   method respuestaAyudarAlPersonaje(unProtagonista) {
-    unProtagonista.decir(self, nombre + ": No necesito ayuda con nada ahora mismo.")
+    unProtagonista.decir(self, "No necesito ayuda con nada ahora mismo.")
   }
 
   method respuestaAcompaniar(unProtagonista) {
-    unProtagonista.decir(self, nombre + ": Ni loco me subo a ese ascensor con olor a pata, tengo cosas que hacer acá.")
+    unProtagonista.decir(self, " Ni loco me subo a ese ascensor con olor a pata, tengo cosas que hacer acá.")
   }
 
   method respuestaComoEscapar(unProtagonista) {
-    unProtagonista.decir(self,nombre + ": No tengo idea de que me estás hablando, escapar de donde?.")
+    unProtagonista.decir(self,"No tengo idea de que me estás hablando, escapar de donde?.")
   }
 
   method recibir(item, unProtagonista) {
-    unProtagonista.decir(self, nombre + ": ¿Para qué quiero " + item.nombre() + "? No gracias, quedatelo.")
+    unProtagonista.decir(self,"¿Para qué quiero " + item.nombre() + "? No gracias, quedatelo.")
   }
 
   method verificarLetra(opcion, unProtagonista) {} // Solo par Charly
@@ -78,7 +78,7 @@ object enteOscuro inherits Personaje(nombre = "Ente Oscuro" , retrato = "cara_en
     if (item == llaveMaestra) {
       unProtagonista.quitarItem(llaveMaestra)
       unProtagonista.modo(modoFinDelJuego)
-      unProtagonista.decir("LO LOGRÉ! POR FIN PUEDO VOLVER A CASA!!!")
+      unProtagonista.decir("LO LOGRÉ! POR FIN PUEDO VOLVER A CASA!!! [ENTER]")
     } else {
       unProtagonista.decir("Eso no abre este candado ni tiene forma de llave wachin. Traeme la Llave Maestra.")
     }
@@ -136,7 +136,13 @@ object charlyGarcia inherits Personaje(nombre = "Charly García", entregoItem = 
         new LineaDialogo(hablante = self, texto = "[1] te va a hacer mal, excepto amarte | [2] ... te ha besado hoy | [3] ... te daño jamás")
       ])
     } else {
-      unProtagonista.decir(self, "¡Gracias por hacerme acordar la letra loco! Say No More, ahora tomate el palo que sigue el recital.")
+      unProtagonista.conversar([
+          new LineaDialogo(hablante = self, texto ="¡Gracias por hacerme acordar la letra loco! Say No More, ahora tomate el palo que sigue el recital."),
+          new LineaDialogo(hablante = unProtagonista, texto = "Gracias a vos por el bajo Charly, pero... que hago yo con este bajo?"),
+          new LineaDialogo(hablante = self, texto = "Sabes tocar el bajo?"),
+          new LineaDialogo(hablante = unProtagonista, texto = "No..."),
+          new LineaDialogo(hablante = self, texto = "Bueno no importa, algún uso le vas a encontrar o daselo a alguien que sepa, arreglate. Chau loco, gracias.")
+      ])
     }
   }
 
@@ -145,7 +151,7 @@ object charlyGarcia inherits Personaje(nombre = "Charly García", entregoItem = 
   }
 
   override method respuestaAcompaniar(unProtagonista) {
-      unProtagonista.decir(self, "Yo no te acompaño a ningún lado, no vesa que estoy tocando gil.")
+      unProtagonista.decir(self, "Yo no te acompaño a ningún lado, no ves que estoy tocando gil.")
   }
 
 override method verificarLetra(opcion, unProtagonista) {
@@ -177,7 +183,7 @@ override method verificarLetra(opcion, unProtagonista) {
       if (opcion == 3) {
         entregoItem = true
         unProtagonista.tomarItem(bajoDePedroAznar)
-        cajaDeTexto.mostrarLineasMinijuego([
+        unProtagonista.conversar([
           new LineaDialogo(hablante = self, texto = "Que temazo! Me salvaste el recital loco, tomá te doy el bajo de Pedro Aznar como agradecimiento"),
           new LineaDialogo(hablante = self, texto = "Sabes tocar el bajo?"),
           new LineaDialogo(hablante = unProtagonista, texto = "No..."),
@@ -193,20 +199,30 @@ override method verificarLetra(opcion, unProtagonista) {
     etapaCancion = 1
     unProtagonista.decir(self, "¡Tiraste cualquiera! Así no sigue el tema. Volvé a hablarme cuando te aprendas mis canciones cipayo.")
   }
+
+  override method recibir(item, unProtagonista) {
+    unProtagonista.decir(self, "Me estás devolviendo el bajo que te acabo de dar? Quedatelo y dale un buen uso")
+    }
 }
 
 object beatles inherits Personaje(nombre = "Los Beatles", entregoItem = false, retrato = "cara_beatles.png") {
 
   override method respuestaAyudarAlPersonaje(unProtagonista) {
     if (not entregoItem) {
-      unProtagonista.decir("Paul McCartney: Perdí mi bajo y no podemos tocar en la carnicería. Si nos traés un buen bajo, te puedo ofrecer nuestro mejor corte de carne.")
+      unProtagonista.conversar([
+          new LineaDialogo(hablante = unProtagonista, texto = "Muchachos, necesitan ayuda con algo?"),
+          new LineaDialogo(hablante = self, texto = "Paul McCartney: Que haces querido? El negocio viene muy bien pero vendí mi bajo para financiarlo."),
+          new LineaDialogo(hablante = self, texto = "Paul McCartney: De casualidad no tendras uno o conoces a alguien que venda?"),
+          new LineaDialogo(hablante = unProtagonista, texto = "Mmm... Dejame te busco uno y te lo traigo"),
+          new LineaDialogo(hablante = self, texto = "Paul McCartney: DE VERDAD! Gracias loco, cuando lo traigas te regalo el mejor corte de nuestra carne, te lo prometo!")
+        ])
     } else {
-      unProtagonista.decir("John Lennon: ¡Este bajo que nos diste suena increíble! Espero que te sirva el churrasco que te dimos, es lo mejor de lo mejor.")
+      unProtagonista.decir(self,"John Lennon: ¡Este bajo que nos diste suena increíble! Espero que te sirva el churrasco que te dimos, es lo mejor de lo mejor.")
     }
   }
 
   override method respuestaComoEscapar(unProtagonista) {
-    unProtagonista.decir("Ringo Starr: Escapar? Yo entiendo que La Matanza no es como Liverpool, pero acá vendemos la mejor carne para alimentar al barrio.")
+    unProtagonista.decir(self,"Ringo Starr: Escapar? Yo entiendo que La Matanza no es como Liverpool, pero acá vendemos la mejor carne para alimentar al barrio.")
   }
 
   override method recibir(item, unProtagonista) {
@@ -214,16 +230,24 @@ object beatles inherits Personaje(nombre = "Los Beatles", entregoItem = false, r
       entregoItem = true
       unProtagonista.reemplazarItem(bajoDePedroAznar, carneDeLosBeattles)
       piso3_CarniceriaBeatles.actualizarImagenConBajo()
-      unProtagonista.decir("Paul McCartney: Este bajo está TREMENDO! Como te prometí acá tenes un corte de nuesra mejor carne, que la disfrutes!.")
+      unProtagonista.decir(self, "Paul McCartney: Este bajo está TREMENDO! Como te prometí acá tenes un corte de nuesra mejor carne, que la disfrutes!.")
     } else {
       super(item, unProtagonista)
     }
   }
+
+  override method respuestaAcompaniar(unProtagonista) {
+    unProtagonista.conversar([
+          new LineaDialogo(hablante = unProtagonista, texto = "Alguno me podria acompañar en el ascensor"),
+          new LineaDialogo(hablante = self, texto = "George Harrison: Perdona loco pero si no podemos dejar la carniceria sola, estamos tapados de laburo.")
+    ])
+  }
 }
 
 // El T-Rex actúa como personaje en la jungla y luego como acompañante del protagonista
-object tRex inherits Personaje(nombre = "T-Rex", retrato = "cara_TRex.png") {
+object tRex inherits Personaje(nombre = "T-Rex", retrato = "cara_trex.png") {
   var comioCarne = false
+  var acompañaAlProta = false
 
   method comerCarne() {
     comioCarne = true
@@ -232,25 +256,38 @@ object tRex inherits Personaje(nombre = "T-Rex", retrato = "cara_TRex.png") {
   method puedeAtacar() = true
 
   override method respuestaAyudarAlPersonaje(unProtagonista) {
-    if (not comioCarne) {
-      unProtagonista.decir("¡ROAAAR! (Le suena la panza de una forma espantosa. Claramente está cagado de hambre).")
+    if (not acompañaAlProta) {
+      if (not comioCarne) {
+        unProtagonista.decir("¡ROAAAR! (Le suena la panza de una forma espantosa. Claramente está cagado de hambre).")
+      } else {
+        unProtagonista.decir("El T-Rex está con la panza llena y mueve la cola como un perrito, es un tierno.")
+      }
     } else {
-      unProtagonista.decir("El T-Rex está con la panza llena y mueve la cola como un perrito, es un tierno.")
+        unProtagonista.decir(self, "El dinosaurio me acompaña en el ascensor y abandonó la jungla")
     }
   }
 
   override method respuestaAcompaniar(unProtagonista) {
     if (not comioCarne) {
-      unProtagonista.decir("¡GRRRR! (Ni loco lo meto al ascensor con este hambre, me va a morfar de un mordisco).")
+      unProtagonista.decir("Ni loco lo meto al ascensor con este hambre, me va a morfar de un mordisco.")
     } else {
       unProtagonista.acompaniante(self)
       piso4_JunglaPrehistorica.seFueElTRex()
+      acompañaAlProta = true
       unProtagonista.decir("¡El T-Rex se subió al ascensor! Ahora podés apretar [A] en cualquier piso para mandarlo al ataque.")
     }
   }
 
   override method respuestaComoEscapar(unProtagonista) {
-    unProtagonista.decir("¡ROAAAR! (Es un dinosaurio, de candados y llaves mucho no entiende).")
+    if(not acompañaAlProta) {
+      unProtagonista.conversar([
+        new LineaDialogo(hablante = unProtagonista, texto = "Ehh.. Disculpame.. Vos sabrías como salir de acá?"),
+        new LineaDialogo(hablante = self, texto = "¡ROAAAR! (Es un dinosaurio, de candados y llaves mucho no entiende)"),
+        new LineaDialogo(hablante = unProtagonista, texto = "Ya estoy en cualquiera pidiendole ayuda a un dinosaurio...")
+      ])
+    } else {
+      unProtagonista.decir(self, "Ahora el Trex es mi amigo, quizas puedo usarlo para que ataque algún piso.")
+    }
   }
 
   override method recibir(item, unProtagonista) {
@@ -258,9 +295,15 @@ object tRex inherits Personaje(nombre = "T-Rex", retrato = "cara_TRex.png") {
       unProtagonista.quitarItem(carneDeLosBeattles)
       self.comerCarne()
       piso4_JunglaPrehistorica.tRexAlimentado()
-      unProtagonista.decir("¡El T-Rex se comió el churrasco y ahora pide mimos! Capaz me acompañe a otros pisos con este buen humor.")
+      unProtagonista.conversar([
+          new LineaDialogo(hablante = unProtagonista, texto = "Tomá pichicho, comé este churrasco y no me morfes a mí."),
+          new LineaDialogo(hablante = self, texto = "RAWR!!"),
+          new LineaDialogo(hablante = unProtagonista, texto = "Wow, atajó la carne en el aire y le cambió el humor completamente."),
+          new LineaDialogo(hablante = self, texto = "rawr (Gracias humano, estaba riquisimo)"),
+          new LineaDialogo(hablante = unProtagonista, texto = "Desde cuando entiendo como hablan los dinosaurios?")
+        ])
     } else {
-      unProtagonista.decir("El T-Rex olfatea " + item.nombre() + " y lo rechaza. Quiere carne de verdad.")
+      unProtagonista.decir("El T-Rex olfatea " + item.nombre() + " y lo rechaza. Quiere carne de verdad, no esto.")
     }
   }
 }

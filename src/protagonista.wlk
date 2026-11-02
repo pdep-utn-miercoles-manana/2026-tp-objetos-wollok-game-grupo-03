@@ -173,8 +173,12 @@ object modoFinDelJuego {
   method abrirInventario(unProta) {}
   method mandarAcompaniante(unProta) {}
   method abrirBotonera(unProta) {}
-  method presionarEnter(unProta) {}
   method presionarNumero(numeroElegido, unProta) {}
+
+  method presionarEnter(unProta) {
+    cajaDeTexto.ocultar()          // Quita la caja y el retrato para despejar los créditos
+    visorDePantalla.mostrarFinal() // Muestra final.png a pantalla completa
+  }
 }
 object protagonista {
 

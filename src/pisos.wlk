@@ -135,7 +135,7 @@ object piso5_BaseMilitar inherits Piso(
         unProtagonista.reemplazarItem(item, llaveMaestra)
         descripcion = "La base militar quedó vacía y solo queda el pozo donde desenterré la Llave Maestra."
         unProtagonista.decir("ESTE MAPA ME SALVÓ LA VIDA!! Pude encontrar la llave maestra para poder escapar. Menos mal, ya me estaba agarrando noni")
-      } else unProtagonista.decir("¡Imposible que me a buscar con el mapa mientras los militares vigilan! Me van a dejar con más agujeros que un queso!.")
+      } else unProtagonista.decir("¡Imposible ponerme a buscar con el mapa ahora! Me van a dejar con más agujeros que un queso!.")
     } else super(item, unProtagonista) 
   }
 }
