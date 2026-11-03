@@ -128,6 +128,7 @@ object charlyGarcia inherits Personaje(nombre = "Charly García", entregoItem = 
   override method respuestaAyudarAlPersonaje(unProtagonista) {
     if (not entregoItem) {
       etapaCancion = 1
+      piso2_RecitalCharly.reproducirSeminare()
       unProtagonista.modo(modoMinijuego)
       cajaDeTexto.mostrarLineasMinijuego([
         new LineaDialogo(hablante = unProtagonista, texto = "CHARLY! QUERIDO! Necesitas que te ayude con algo?"),
@@ -182,6 +183,7 @@ override method verificarLetra(opcion, unProtagonista) {
     } else if (etapaCancion == 3) {
       if (opcion == 3) {
         entregoItem = true
+        piso2_RecitalCharly.reproducirAmbiente()
         unProtagonista.tomarItem(bajoDePedroAznar)
         unProtagonista.conversar([
           new LineaDialogo(hablante = self, texto = "Que temazo! Me salvaste el recital loco, tomá te doy el bajo de Pedro Aznar como agradecimiento"),
@@ -197,6 +199,7 @@ override method verificarLetra(opcion, unProtagonista) {
 
   method fallarCancion(unProtagonista) {
     etapaCancion = 1
+    piso2_RecitalCharly.reproducirAmbiente()
     unProtagonista.decir(self, "¡Tiraste cualquiera! Así no sigue el tema. Volvé a hablarme cuando te aprendas mis canciones, cipayo.")
   }
 

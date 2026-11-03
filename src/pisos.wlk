@@ -36,6 +36,10 @@ class Piso {
       unProtagonista.decir("Estoy solo, no tengo ningún acompañante para mandar.")
     }
   }
+
+  //para pistas de audio: 
+  method entrar() {}
+  method salir() {}
 }
 
 
@@ -60,7 +64,37 @@ object piso2_RecitalCharly inherits Piso(
   descripcion = "NO TE PUEDO CREER CHARLY GARCÍA Y CANTANDO SEMINARE... es el mejor dia de mi vida",
   personaje = charlyGarcia,
   imagen = "piso2_seminare.png"
-) {}
+) {
+  const ambiente = game.sound("recital_charly.mp3")
+  const seminare = game.sound("seminare.mp3")
+
+  override method entrar() {
+    self.reproducirAmbiente()
+  }
+
+  override method salir() {
+    self.frenarTodo()
+  }
+
+  method reproducirAmbiente() {
+    self.frenarTodo()
+    ambiente.shouldLoop(true)
+    ambiente.volume(0.1)
+    ambiente.play()
+  }
+
+  method reproducirSeminare() {
+    self.frenarTodo()
+    seminare.shouldLoop(true)
+    seminare.volume(0.6)
+    seminare.play()
+  }
+
+  method frenarTodo() {
+    if (ambiente.played()) { ambiente.stop() }
+    if (seminare.played()) { seminare.stop() }
+  }
+}
   //Charly García está en un recital, y se olvida la letra de Seminare, el jugador debe completarla.
   //Al finalizarla, Charly le da un Bajo al protagonista en agradencimiento
 

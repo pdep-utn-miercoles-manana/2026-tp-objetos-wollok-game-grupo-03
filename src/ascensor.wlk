@@ -17,8 +17,11 @@ object ascensor {
   }
 
   method irAPiso(numeroPiso) {
+
+    pisoActual.salir()
     const destino = pisos.find({ p => p.numero() == numeroPiso })
     pisoActual = destino
+    pisoActual.entrar()
     visorDePantalla.mostrarPisoActual()
     protagonista.decir("Llegué al piso " + numeroPiso + ". " + "a ver que onda...")
   }
