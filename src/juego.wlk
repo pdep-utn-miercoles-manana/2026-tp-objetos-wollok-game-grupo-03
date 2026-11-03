@@ -29,7 +29,7 @@ class LineaDialogo {
 }
 
 object retratoDialogo {
-  var property position = game.at(1, 0)
+  var property position = game.at(1, 1)
   var property image = "cara_prota.png"
 }
 
@@ -138,7 +138,7 @@ object cajaDeTexto {
 }
 
 object textoDialogo {
-  var property position = game.at(7, 1)
+  var property position = game.at(8, 1)
   var property text = ""
   var property textColor = "FFFFFF"
 }

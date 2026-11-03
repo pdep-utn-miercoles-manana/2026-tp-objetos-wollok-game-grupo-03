@@ -29,7 +29,7 @@ object navegacionPrologo {
     if (numeroPiso == 0) {
       unAscensor.irAPiso(0)
       unAscensor.navegacion(navegacionLibre)
-      protagonista.decir("¿QUE PASO ACÁ? ¿Y LA SALIDA? Capaz ese wacho encapuchado me dice que pasó.")
+      protagonista.decir("¿QUE PASO ACÁ? ¿Y LA SALIDA? Capaz ese tipo encapuchado me dice que pasó.")
     } else {
       protagonista.decir("Estoy muy cansado para ir a otros pisos, mejor voy a la planta Baja .")
     }

@@ -60,13 +60,16 @@ object modoInventario {
       const itemElegido = unProta.inventario().get(numeroElegido - 1)
       itemElegido.usarEn(ascensor.pisoActual(), unProta) // Polimorfismo puro
     } else {
-      unProta.decir("No tengo nada para usar ahi, flashie.")
+      unProta.decir("No tengo nada para usar ahi, flashié.")
     }
   }
 }
 
 object modoDialogo {
-  method iniciarDialogo(unProta) {} // Ya está hablando el protagonista, no puede hacer nada mas
+  method iniciarDialogo(unProta) {
+    unProta.modo(modoExploracion)      
+    cajaDeTexto.ocultar()
+  } // Ya está hablando el protagonista, no puede hacer nada mas
   method inspeccionarPiso(unProta) {}
   method abrirInventario(unProta) {}
   method mandarAcompaniante(unProta) {}
@@ -89,7 +92,10 @@ object modoConversacion {
   }
 
   // Bloquea las demás acciones hasta que termine el ida y vuelta
-  method iniciarDialogo(unProta) {}
+  method iniciarDialogo(unProta) {
+    unProta.modo(modoExploracion)      
+    cajaDeTexto.ocultar()
+  }
   method inspeccionarPiso(unProta) {}
   method abrirInventario(unProta) {}
   method mandarAcompaniante(unProta) {}
@@ -136,7 +142,7 @@ object modoIntro {
   method presionarEnter(unProta) {
     visorDePantalla.mostrarPisoActual() // Pasa a mostrar el Piso 6 (Oficina)
     unProta.modo(modoExploracion)       // Habilita los controles del juego
-    unProta.decir("Qué largo día en la oficina che... mejor ya bajo a Planta Baja para ir a casa. (Tecla B para ver la botonera del ascensor)")
+    unProta.decir("Que largo día en la oficina che... mejor ya bajo a Planta Baja para ir a casa. (Tecla B para ver la botonera del ascensor)")
   }
 
   method iniciarDialogo(unProta) {} // No hace nada, es solo la introduccion
