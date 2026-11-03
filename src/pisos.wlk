@@ -48,14 +48,42 @@ object piso0_PlantaBaja inherits Piso(
   descripcion = "La puerta de salida está cerrada con cadenas y candado, además hay un tipo encapuchado con un horrible olor a humedad.",
   personaje = enteOscuro,
   imagen = "piso0_entrada.png"
-) {} 
+) {
+  const ambienteOscuro = game.sound("audioOscuro.mp3")
+
+  override method entrar() {
+    ambienteOscuro.shouldLoop(true)
+    ambienteOscuro.volume(0.2)
+    ambienteOscuro.play()
+  }
+
+  override method salir() {
+    if (ambienteOscuro.played()) {
+      ambienteOscuro.stop()
+    }
+  }
+}
 
 object piso1_Biblioteca inherits Piso(
   numero = 1,
   descripcion = "Es una biblioteca llena de libros y papiros antiguos. Hay un egipcio muy fachero ordenando libros varios, capaz sepa como salir de acá.",
   personaje = bibliotecario,
   imagen = "piso1_biblioteca.png"
-) {}
+) {
+  const ambienteBiblioteca = game.sound("biblioteca.mp3")
+
+  override method entrar() {
+    ambienteBiblioteca.shouldLoop(true)
+    ambienteBiblioteca.volume(0.2)
+    ambienteBiblioteca.play()
+  }
+
+  override method salir() {
+    if (ambienteBiblioteca.played()) {
+      ambienteBiblioteca.stop()
+    }
+  }
+}
   //Hay un bibliotecario, le presenta un libro al protagonista que tiene un mapa
   // que le dice donde esta la llave escondida en la base militar.
 
