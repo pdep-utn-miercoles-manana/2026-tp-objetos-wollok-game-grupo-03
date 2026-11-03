@@ -183,5 +183,22 @@ object piso6_Oficina inherits Piso(
   descripcion = "Terminó la jornada laboral y no queda nadie en la oficina, quiero irme a casa.",
   personaje = sinPersonaje,
   imagen = "piso6_oficina.png"
-) {}
+) {
+   var ambienteOficina = null
+
+  override method entrar() {
+    if (ambienteOficina == null) {
+      ambienteOficina = game.sound("oficina.mp3")
+      ambienteOficina.shouldLoop(true)
+      ambienteOficina.volume(0.1)
+    }
+    ambienteOficina.play()
+  }
+
+  override method salir() {
+    if (ambienteOficina.played()) {
+      ambienteOficina.stop()
+    }
+  }
+}
   //En este piso arranca el juego. El personaje se quiere ir a su casa y se sube al ascensor

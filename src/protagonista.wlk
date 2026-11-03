@@ -140,6 +140,7 @@ object modoPortada {
 
 object modoIntro {
   method presionarEnter(unProta) {
+    ascensor.pisoActual().entrar()
     visorDePantalla.mostrarPisoActual() // Pasa a mostrar el Piso 6 (Oficina)
     unProta.modo(modoExploracion)       // Habilita los controles del juego
     unProta.decir("Que largo día en la oficina che... mejor ya bajo a Planta Baja para ir a casa. (Tecla B para ver la botonera del ascensor)")
