@@ -251,6 +251,7 @@ object beatles inherits Personaje(nombre = "Los Beatles", entregoItem = false, r
 object tRex inherits Personaje(nombre = "T-Rex", retrato = "cara_trex.png") {
   var comioCarne = false
   var acompañaAlProta = false
+    
 
   method comerCarne() {
     comioCarne = true
@@ -297,6 +298,9 @@ object tRex inherits Personaje(nombre = "T-Rex", retrato = "cara_trex.png") {
     if (item == carneDeLosBeattles and not comioCarne) {
       unProtagonista.quitarItem(carneDeLosBeattles)
       self.comerCarne()
+      const trex_contento = game.sound("trex_grunido.mp3")
+      trex_contento.volume(0.5)
+      trex_contento.play()
       piso4_JunglaPrehistorica.tRexAlimentado()
       unProtagonista.conversar([
           new LineaDialogo(hablante = unProtagonista, texto = "Tomá pichicho, comé este churrasco y no me morfes a mí."),

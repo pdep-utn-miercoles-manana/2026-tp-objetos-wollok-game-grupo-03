@@ -137,6 +137,20 @@ object piso3_CarniceriaBeatles inherits Piso(
     imagen = "piso3_beatlesConBajo.png"
     visorDePantalla.mostrarPisoActual() // Refresca la pantalla al instante
   }
+
+  const ambienteCarniceria = game.sound("carniceria.mp3")
+
+  override method entrar() {
+    ambienteCarniceria.shouldLoop(true)
+    ambienteCarniceria.volume(0.2)
+    ambienteCarniceria.play()
+  }
+
+  override method salir() {
+    if (ambienteCarniceria.played()) {
+      ambienteCarniceria.stop()
+    }
+}
 }
 
   //Los Beatles tienen una carnicería. A Paul Mccartney le falta el bajo. 
@@ -149,6 +163,8 @@ object piso4_JunglaPrehistorica inherits Piso(
   imagen = "piso4_rawr.png"
 ) 
 {
+  const ambienteJungla = game.sound("jungla.mp3")
+
   method tRexAlimentado() {
     descripcion = "El T-Rex se comió el churrasco y ahora tiene cara de bueno. Parece un perrito gigante."
     imagen = "piso4_feliz.png" // 2. Estado intermedio: T-Rex amigable
@@ -161,6 +177,20 @@ object piso4_JunglaPrehistorica inherits Piso(
     imagen = "piso4_sinTRex.png" // 3. Estado final: Jungla vacía
     visorDePantalla.mostrarPisoActual() 
   }
+
+  
+
+  override method entrar() {
+    ambienteJungla.shouldLoop(true)
+    ambienteJungla.volume(0.4)
+    ambienteJungla.play()
+  }
+
+  override method salir() {
+    if (ambienteJungla.played()) {
+      ambienteJungla.stop()
+    }
+  }
 }
   //Hay un tiranosaurio Rex. Para que no ataque hay que alimentarlo (pedazo de carne).
   //Al completarlo, el Trex es acompañante del protagonista
@@ -171,14 +201,47 @@ object piso5_BaseMilitar inherits Piso(
   personaje = sinPersonaje,
   imagen = "piso5_shadowMoses.png"
 ) {
-
+  const ambienteMilitar = game.sound("baseMilitar.mp3")
+  const sonidoAtaque = game.sound("momentoAtaque.mp3")
+  const ambienteDespejado = game.sound("baseDespejada.mp3")
   var property estaDespejada = false
+
+  override method entrar(){
+    if(estaDespejada){
+      ambienteDespejado.shouldLoop(true)
+      ambienteDespejado.volume(0.4)
+      ambienteDespejado.play()
+    }else{
+      ambienteMilitar.shouldLoop(true)
+    ambienteMilitar.volume(0.3)
+    ambienteMilitar.play()
+    }
+  }
+
+  override method salir(){
+    if(ambienteDespejado.played()){
+      ambienteDespejado.stop()
+    }
+    if(ambienteMilitar.played()){
+      ambienteMilitar.stop()
+    }
+  }
 
   //ataqueTrex -> recibirAcompaniante para hacer polimorfismo, consulta
   override method recibirAcompaniante(acompaniante, unProtagonista) {
     if (acompaniante.puedeAtacar()) {
       if (not estaDespejada) {
         estaDespejada = true
+
+        if(ambienteMilitar.played()){
+          ambienteMilitar.stop()
+        }
+        sonidoAtaque.volume(0.5)
+        sonidoAtaque.play()
+        ambienteDespejado.shouldLoop(true)
+        ambienteDespejado.volume(0.4)
+        ambienteDespejado.play()
+
         descripcion = "La base militar quedó completamente desierta tras el ataque del T-Rex. Ahora sería un buen momento para ver que onda este lugar sin que me disparen."
         imagen = "piso5_atacado.png" // <-- CAMBIA LA IMAGEN AL DESTRUIR
         visorDePantalla.mostrarPisoActual()
