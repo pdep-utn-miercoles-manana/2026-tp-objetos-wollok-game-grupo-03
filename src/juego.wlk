@@ -10,6 +10,10 @@ object visorDePantalla {
     image = "intro.png" // Segunda imagen con la descripción del juego
   }
 
+  method mostrarAscensorCerrado() {
+    image = "ascensor_cerrado.png" // Muestra las puertas cerradas
+  }
+
   method mostrarPisoActual() {
     image = ascensor.pisoActual().imagen() // Muestra el .png del piso donde esté el ascensor
   }
@@ -33,13 +37,22 @@ object retratoDialogo {
   var property image = "cara_prota.png"
 }
 
+object barraControles {
+ 
+  method position() = game.at(7, 0)
+
+  method text() = "[H]: Hablar   [B]: Botonera   [E]: Inventario   [A]: Mandar Acompañante"
+
+  method textColor() = "#FFFFFF"
+}
+
 object juego {
   method iniciar() {
     game.title("Ascensor Dimensional")
     game.width(15)
     game.height(10)
     game.cellSize(64)
-    
+
 // Agregamos primero el visor de pantalla para que quede de fondo
     game.addVisual(visorDePantalla)
 
@@ -104,6 +117,7 @@ object cajaDeTexto {
       game.addVisual(self)
       game.addVisual(retratoDialogo)
       game.addVisual(textoDialogo)
+      game.addVisual(barraControles)
       visible = true
     } else {
       // refresco por si no aparace la cara
@@ -117,6 +131,7 @@ object cajaDeTexto {
       game.removeVisual(textoDialogo)
       game.removeVisual(retratoDialogo) // <-- SACAMOS EL RETRATO DE LA PANTALLA
       game.removeVisual(self)
+      game.removeVisual(barraControles)
       visible = false
     }
   }
@@ -143,3 +158,34 @@ object textoDialogo {
   var property textColor = "FFFFFF"
 }
 
+object musicaIntro {
+  const sonido = game.sound("intro.mp3")
+
+  method iniciar() {
+    sonido.shouldLoop(true)
+    sonido.volume(0.3)
+    sonido.play()
+  }
+
+  method frenar() {
+    if (sonido.played()) {
+      sonido.stop()
+    }
+  }
+}
+
+object musicaFinal {
+  const sonido = game.sound("outro.mp3")
+
+  method iniciar() {
+    sonido.shouldLoop(true)
+    sonido.volume(0.4)
+    sonido.play()
+  }
+
+  method frenar() {
+    if (sonido.played()) {
+      sonido.stop()
+    }
+  }
+}
