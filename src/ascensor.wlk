@@ -5,7 +5,7 @@ import juego.*
 object ascensor {
   var property pisoActual = piso6_Oficina
   var property navegacion = navegacionPrologo
-  
+
   const pisos = [
     piso0_PlantaBaja, piso1_Biblioteca, piso2_RecitalCharly, 
     piso3_CarniceriaBeatles, piso4_JunglaPrehistorica, 
@@ -17,30 +17,50 @@ object ascensor {
   }
 
   method irAPiso(numeroPiso) {
-
+    cajaDeTexto.ocultar()
     pisoActual.salir()
+    visorDePantalla.mostrarAscensorCerrado()
+    const sonidoPuertas = game.sound("abrirAscensor.mp3")
+    sonidoPuertas.volume(0.3)
+    sonidoPuertas.play()
+
+    game.schedule(2000, {
     const destino = pisos.find({ p => p.numero() == numeroPiso })
     pisoActual = destino
     pisoActual.entrar()
     visorDePantalla.mostrarPisoActual()
-    protagonista.decir("Llegué al piso " + numeroPiso + ". " + "a ver que onda...")
+    protagonista.modo(modoExploracion)
+    protagonista.decir("Llegué al piso " + numeroPiso + ". " + "a ver que onda...")})
+    
   }
 }
 
-object navegacionPrologo {
-  method viajarA(numeroPiso, unAscensor) {
-    if (numeroPiso == 0) {
-      unAscensor.irAPiso(0)
-      unAscensor.navegacion(navegacionLibre)
-      protagonista.decir("¿QUE PASO ACÁ? ¿Y LA SALIDA? Capaz ese tipo encapuchado me dice que pasó.")
-    } else {
-      protagonista.decir("Estoy muy cansado para ir a otros pisos, mejor voy a la planta Baja .")
+  object navegacionPrologo {
+    method viajarA(numeroPiso, unAscensor) {
+      if (numeroPiso == 0) {
+        unAscensor.navegacion(navegacionLibre)
+        unAscensor.irAPiso(0)
+        game.schedule(2100, {
+        protagonista.decir("¿QUE PASO ACÁ? ¿Y LA SALIDA? Capaz ese tipo encapuchado me dice que pasó.")
+      })
+      } else {
+        protagonista.decir("Estoy muy cansado para ir a otros pisos, mejor voy a la planta Baja .")
+      }
     }
-  }
-}
+ }
+
+// object navegacionLibre {
+//   method viajarA(numeroPiso, unAscensor) {
+//     unAscensor.irAPiso(numeroPiso)
+//   }
+// }
 
 object navegacionLibre {
   method viajarA(numeroPiso, unAscensor) {
-    unAscensor.irAPiso(numeroPiso)
+    if (unAscensor.pisoActual().numero() == numeroPiso) {
+      protagonista.decir("Ya estoy en este piso.")
+    } else {
+      unAscensor.irAPiso(numeroPiso)
+    }
   }
 }

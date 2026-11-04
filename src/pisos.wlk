@@ -110,7 +110,7 @@ object piso2_RecitalCharly inherits Piso(
   method reproducirSeminare() {
     self.frenarTodo()
     seminare.shouldLoop(true)
-    seminare.volume(0.6)
+    seminare.volume(0.4)
     seminare.play()
   }
 

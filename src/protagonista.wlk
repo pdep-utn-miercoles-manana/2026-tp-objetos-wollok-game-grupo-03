@@ -175,6 +175,8 @@ object modoMinijuego {
 }
 
 object modoFinDelJuego {
+  
+
   method iniciarDialogo(unProta) {}
   method inspeccionarPiso(unProta) {}
   method abrirInventario(unProta) {}
@@ -185,6 +187,8 @@ object modoFinDelJuego {
   method presionarEnter(unProta) {
     cajaDeTexto.ocultar()          // Quita la caja y el retrato para despejar los créditos
     visorDePantalla.mostrarFinal() // Muestra final.png a pantalla completa
+    ascensor.pisoActual().salir()
+    musicaFinal.iniciar()
   }
 }
 object protagonista {
