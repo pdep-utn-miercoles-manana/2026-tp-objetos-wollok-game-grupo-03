@@ -257,7 +257,9 @@ object tRex inherits Personaje(nombre = "T-Rex", retrato = "cara_trex.png") {
     comioCarne = true
   }
 
-  method puedeAtacar() = true
+  method actuarEn(unPiso, unProtagonista) {
+    unPiso.recibirAtaqueTRex(unProtagonista)
+  }
 
   override method respuestaAyudarAlPersonaje(unProtagonista) {
     if (not acompañaAlProta) {
@@ -319,18 +321,19 @@ object tRex inherits Personaje(nombre = "T-Rex", retrato = "cara_trex.png") {
 
 // --- OBJETOS NULOS POLIMÓRFICOS ---
 
-object sinPersonaje {
-  method nombre() = "nadie"
-  method responder(opcion, unProtagonista) {
+object sinPersonaje inherits Personaje(nombre = "nadie", retrato = "") {
+  override method responder(opcion, unProtagonista) {
     unProtagonista.decir("No hay nadie con quien hablar en este piso. Estoy hablando solo, estoy re chapita.")
   }
-  method recibir(item, unProtagonista) {
+  override method recibir(item, unProtagonista) {
     unProtagonista.decir("No sirve de nada usar " + item.nombre() + " en este piso.")
   }
-  method verificarLetra(opcion, unProtagonista) {}
+  override method verificarLetra(opcion, unProtagonista) {}
 }
 
 object sinAcompaniante {
   method nombre() = "Sin Acompañante"
-  method puedeAtacar() = false
+  method actuarEn(unPiso, unProtagonista) {
+    unProtagonista.decir("Estoy solo, no tengo ningún acompañante para mandar.")
+  }
 }

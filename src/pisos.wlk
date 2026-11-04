@@ -28,13 +28,9 @@ class Piso {
     personaje.recibir(item, unProtagonista)
   }
 
-  // Intermediario para el acompañante
-  method recibirAcompaniante(acompañante, unProtagonista) {
-    if (acompañante.puedeAtacar()) {
-      unProtagonista.decir("El T-Rex ruge al pedo, no hay nadie a quien asustar.")
-    } else {
-      unProtagonista.decir("Estoy solo, no tengo ningún acompañante para mandar.")
-    }
+  // Reacción al ataque del T-Rex (Double Dispatch)
+  method recibirAtaqueTRex(unProtagonista) {
+    unProtagonista.decir("El T-Rex ruge al pedo, no hay nadie a quien asustar.")
   }
 
   //para pistas de audio: 
@@ -227,30 +223,25 @@ object piso5_BaseMilitar inherits Piso(
     }
   }
 
-  //ataqueTrex -> recibirAcompaniante para hacer polimorfismo, consulta
-  override method recibirAcompaniante(acompaniante, unProtagonista) {
-    if (acompaniante.puedeAtacar()) {
-      if (not estaDespejada) {
-        estaDespejada = true
+  override method recibirAtaqueTRex(unProtagonista) {
+    if (not estaDespejada) {
+      estaDespejada = true
 
-        if(ambienteMilitar.played()){
-          ambienteMilitar.stop()
-        }
-        sonidoAtaque.volume(0.5)
-        sonidoAtaque.play()
-        ambienteDespejado.shouldLoop(true)
-        ambienteDespejado.volume(0.4)
-        ambienteDespejado.play()
-
-        descripcion = "La base militar quedó completamente desierta tras el ataque del T-Rex. Ahora sería un buen momento para ver que onda este lugar sin que me disparen."
-        imagen = "piso5_atacado.png" // <-- CAMBIA LA IMAGEN AL DESTRUIR
-        visorDePantalla.mostrarPisoActual()
-        unProtagonista.decir("¡El T-Rex corrió a todos los militares y dejó la base libre! Ahora puedo usar el mapa para buscar la llave.")
-      } else {
-        unProtagonista.decir("La base ya está completamente despejada, el T-Rex se los boleteó a todos")
+      if(ambienteMilitar.played()){
+        ambienteMilitar.stop()
       }
+      sonidoAtaque.volume(0.5)
+      sonidoAtaque.play()
+      ambienteDespejado.shouldLoop(true)
+      ambienteDespejado.volume(0.4)
+      ambienteDespejado.play()
+
+      descripcion = "La base militar quedó completamente desierta tras el ataque del T-Rex. Ahora sería un buen momento para ver que onda este lugar sin que me disparen."
+      imagen = "piso5_atacado.png" // <-- CAMBIA LA IMAGEN AL DESTRUIR
+      visorDePantalla.mostrarPisoActual()
+      unProtagonista.decir("¡El T-Rex corrió a todos los militares y dejó la base libre! Ahora puedo usar el mapa para buscar la llave.")
     } else {
-        super(acompaniante, unProtagonista)
+      unProtagonista.decir("La base ya está completamente despejada, el T-Rex se los boleteó a todos")
     }
   }
   //habria que usar usarItem(LibroAntiguo), consulta

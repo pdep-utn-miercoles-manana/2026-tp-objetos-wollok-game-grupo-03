@@ -25,7 +25,7 @@ object modoExploracion {
   }
 
   method mandarAcompaniante(unProta) {
-    ascensor.pisoActual().recibirAcompaniante(unProta.acompaniante(), unProta)
+    unProta.acompaniante().actuarEn(ascensor.pisoActual(), unProta)
   }
 
   method abrirBotonera(unProta) {
@@ -189,6 +189,7 @@ object modoFinDelJuego {
 }
 object protagonista {
 
+    method ascensor() = ascensor
     var property inventario = [manosVacias, manosVacias] // va a tener que tratarse de un SET ya que puede tener varios items -- Preferimos usar listas ya que podemos acceder por indice al momento de querer usar los items y asignarlos a las teclas
     var property acompaniante = sinAcompaniante
     var property modo = modoPortada

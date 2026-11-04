@@ -7,7 +7,7 @@
   "testFolder": "test",
   "wollokVersion": "4.0.0",
   "scripts": {
-    "start": "wollok run main.main",
+    "start": "wollok run src.main.main",
     "test": "wollok test"
   }
 }

@@ -26,6 +26,17 @@ describe "Tests de Ascensor Dimensional - Grupo 03" {
     ascensor.pisoActual(5)
     assert.equals(5, ascensor.pisoActual())
   }
+
+  test "El protagonista sin acompañante intenta actuar y no rompe" {
+    protagonista.acompaniante().actuarEn(piso5_BaseMilitar, protagonista)
+    assert.notThat(piso5_BaseMilitar.estaDespejada())
+  }
+
+  test "El T-Rex ataca la base militar y la despeja por Double Dispatch" {
+    protagonista.acompaniante(tRex)
+    protagonista.acompaniante().actuarEn(piso5_BaseMilitar, protagonista)
+    assert.that(piso5_BaseMilitar.estaDespejada())
+  }
 }
 
 describe "Tests del Ascensor" {
